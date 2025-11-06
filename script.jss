@@ -4,7 +4,6 @@ const questions = {
     "start": {
         question: "Kendini, hayatındaki en yakın 3 kişi tarafından koşulsuz sevilen biri olarak görüyor musun?",
         options: [
-            // Cevaplar ve yönlendirildiği sonraki soru ID'leri
             { text: "Evet, kesinlikle.", next: "sevgi_detaylari_1" },
             { text: "Hayır, tam olarak değil.", next: "eksik_sevgi_kaynagi_1" }
         ]
@@ -30,6 +29,14 @@ const questions = {
         ]
     },
     
-    // --- Örnek Devam Soruları (3. Katmana Geçiş) ---
+    // --- 3. Katman (2. Katman, Sevgi-Aile kolunun devamı) ---
     "sevgi_aile_2": {
-        question: "Ailenden gelen sevgiyi
+        question: "Ailenden gelen sevgiyi nasıl hissediyorsun? Sözlü onay mı yoksa eylemlerle mi?",
+        options: [
+            // Next ID'leri, 4. Katmana yönlendiren yeni ID'ler
+            { text: "Sözlü takdirlerle.", next: "aile_sozlu_3a" }, 
+            { text: "Yardım ve destek eylemleriyle.", next: "aile_eylem_3b" } 
+        ]
+    },
+    
+    // ---

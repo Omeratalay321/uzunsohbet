@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derin Sohbet Macerası</title>
+    <style>
+        /* CSS Kodları Buraya Gelecek */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .chat-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            padding: 30px;
+            text-align: center;
+        }
+        #question {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            min-height: 50px; /* Soruların yerleşimi için */
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .option-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .option-button:hover {
+            background-color: #2980b9;
+        }
+        .option-button:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div id="question"></div>
+    <div class="options" id="options-container">
+        </div>
+</div>
+
+<script>
+    /* JavaScript Kodları Buraya Gelecek */
+    const questions = {
+        // --- 1. Katman Giriş Sorusu ---
+        "start": {
+            question: "Kendini, hayatındaki en yakın 3 kişi tarafından koşulsuz sevilen biri olarak görüyor musun?",
+            options: [
+                { text: "Evet, kesinlikle.", next: "sevgi_detaylari_1" },
+                { text: "Hayır, tam olarak değil.", next: "eksik_sevgi_kaynagi_1" }
+            ]
+        },
+
+        // --- 2. Katman (Evet Kolu) ---
+        "sevgi_detaylari_1": {
+            question: "Harika! Bu sevgiyi en çok kimden alıyorsun?",
+            options: [
+                { text: "Ailemden.", next: "sevgi_aile_2" },
+                { text: "Arkadaşlarımdan.", next: "sevgi_arkadas_2" },
+                { text: "Partnerimden.", next: "sevgi_partner_2" }
+            ]
+        },
+
+        // --- 2. Katman (Hayır Kolu) ---
+        "eksik_sevgi_kaynagi_1": {
+            question: "Üzgünüm. Peki, bu eksiklik en çok hangi ilişkide seni rahatsız ediyor?",
+            options: [
+                { text: "Aile ilişkileri.", next: "eksik_aile_2" },
+                { text: "Romantik ilişkiler.", next: "eksik_partner_2" },
+                { text: "Kendi kendime olan ilişkimde.", next: "eksik_benlik_2" }
+            ]
+        },
+        
+        // --- Yolların Sonu (Şimdilik) ---
+        "son_mesaj": {
+            question: "Şimdilik bu yolun sonuna geldik. Buradan itibaren hikayeyi uzatabilirsin! 😊",
+            options: [] // Bitir
+        },
+        
+        // --- Örnek Devam Soruları (Tüm yolları buraya bağlayıp uzatman gerek) ---
+        "sevgi_aile_2": {
+            question: "Ailenden gelen sevgiyi nasıl hissediyorsun? Sözlü onay mı yoksa eylemlerle mi?",
+            options: [
+                { text: "Sözlü takdirlerle.", next: "son_mesaj" }, // Yeni sorular ekle!
+                { text: "Yardım ve destek eylemleriyle.", next: "son_mesaj" }
+            ]
+        },
+        "eksik_benlik_2": {
+            question: "Kendi kendine olan ilişkinde neyin eksik olduğunu düşünüyorsun? Kendini yeterince takdir ediyor musun?",
+            options: [
+                { text: "Sanırım kendime haksızlık ediyorum.", next: "son_mesaj" },
+                { text: "Hayır, kendime karşı nazikim.", next: "son_mesaj" }
+            ]
+        }
+        
+        // BURAYA YÜZLERCE YENİ SORU EKLENECEK!
+        // Örneğin: "eksik_benlik_2_a_detay1", "eksik_benlik_2_a_detay1_devam" gibi...
+
+    };
+
+    let currentQuestionId = "start";
+
+    function loadQuestion(questionId) {
+        const data = questions[questionId];
+        const questionEl = document.getElementById("question");
+        const optionsContainer = document.getElementById("options-container");
+
+        if (!data) {
+            questionEl.textContent = "Hata: Bir sonraki soru bulunamadı. Lütfen JS kodunu kontrol et.";
+            optionsContainer.innerHTML = "";
+            return;
+        }
+
+        questionEl.textContent = data.question;
+        optionsContainer.innerHTML = ""; // Önceki şıkları temizle
+
+        data.options.forEach(option => {
+            const button = document.createElement("button");
+            button.className = "option-button";
+            button.textContent = option.text;
+            
+            if (option.next) {
+                button.onclick = () => {
+                    currentQuestionId = option.next;
+                    loadQuestion(currentQuestionId);
+                };
+            }
+            optionsContainer.appendChild(button);
+        });
+    }
+
+    // Sayfa yüklendiğinde ilk soruyu yükle
+    loadQuestion(currentQuestionId);
+</script>
+
+</body>
+</html>

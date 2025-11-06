@@ -1,0 +1,63 @@
+/* Genel Stil ve Arkaplan */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e8f5e9; /* Açık Yeşil/Nane tonu */
+    color: #333;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Ana Sohbet Kutusu */
+.chat-container {
+    background-color: #ffffff;
+    border-radius: 15px; /* Daha yumuşak köşeler */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Daha belirgin gölge */
+    width: 90%;
+    max-width: 650px;
+    padding: 30px;
+    text-align: center;
+}
+
+/* Soru Metni */
+#question {
+    font-size: 1.6em; /* Daha büyük ve vurgulu */
+    color: #1b5e20; /* Koyu Yeşil */
+    margin-bottom: 40px;
+    font-weight: 600; /* Daha kalın */
+    line-height: 1.4;
+}
+
+/* Şıkların Yerleşimi */
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Seçenek Butonları */
+.option-button {
+    background-color: #4caf50; /* Canlı Yeşil */
+    color: white;
+    border: none;
+    padding: 18px 25px;
+    border-radius: 10px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s;
+    text-align: left;
+}
+
+/* Butonun Üzerine Gelindiğinde */
+.option-button:hover {
+    background-color: #388e3c; /* Daha koyu yeşil */
+}
+
+/* Butona Tıklanıldığında */
+.option-button:active {
+    transform: scale(0.99);
+}

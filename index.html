@@ -6,17 +6,19 @@
     <title>Derin Sohbet Macerası (Tüm Kollar)</title>
     <style>
         /* ======================================= */
-        /* CSS KODLARI */
+        /* CSS KODLARI (GÜNCEL) */
         /* ======================================= */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7f6;
             color: #333;
             margin: 0;
+            /* DÜZELTME 1: Yüksekliği tam yapıp, dikey hizalamayı kaldırıyoruz ki içerik görünür kalsın. */
+            min-height: 100vh; 
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            align-items: flex-start; /* İçeriği yukarıdan başlat */
+            padding-top: 50px; /* Üstten boşluk bırak */
         }
         .chat-container {
             background-color: #ffffff;
@@ -26,7 +28,6 @@
             max-width: 600px;
             padding: 30px;
             text-align: center;
-            /* Animasyon ekleyelim */
             animation: fadeIn 0.8s ease-out;
         }
         @keyframes fadeIn {
@@ -71,8 +72,6 @@
             font-weight: bold;
         }
         /* ======================================= */
-        /* CSS KODLARI SONU */
-        /* ======================================= */
     </style>
 </head>
 <body>
@@ -85,4 +84,322 @@
 
 <script>
     /* ======================================= */
-    /* NİHAİ JAVASCRIPT KODLARI
+    /* NİHAİ JAVASCRIPT KODLARI (DEĞİŞMEDİ) */
+    /* ======================================= */
+
+    const questions = {
+        // ---------------------------------------------------------
+        // 1. KATMAN: BAŞLANGIÇ
+        // ---------------------------------------------------------
+        "start": {
+            question: "Kendini, hayatındaki en yakın 3 kişi tarafından koşulsuz sevilen biri olarak görüyor musun?",
+            options: [
+                { text: "Evet, kesinlikle.", next: "sevgi_detaylari_2" },
+                { text: "Hayır, tam olarak değil.", next: "eksik_sevgi_kaynagi_2" }
+            ]
+        },
+
+        // ---------------------------------------------------------
+        // 2. KATMAN: KAYNAK SEÇİMİ
+        // ---------------------------------------------------------
+        "sevgi_detaylari_2": {
+            question: "Harika! Bu hissi aldığın en önemli üç kaynak (kişi/grup) nedir?",
+            options: [
+                { text: "Ailem.", next: "sevgi_aile_3" },
+                { text: "Arkadaş çevrem.", next: "sevgi_arkadas_3" },
+                { text: "Partnerim / Romantik ilişkim.", next: "sevgi_partner_3" }
+            ]
+        },
+
+        "eksik_sevgi_kaynagi_2": {
+            question: "Üzgünüm. Bu eksiklik hissi, en çok hangi alanda kendini gösteriyor?",
+            options: [
+                { text: "Ailemden gelen sevgide.", next: "eksik_aile_3" },
+                { text: "Kendi kendimi kabul edişimde.", next: "eksik_benlik_3" },
+                { text: "Romantik bir ilişkide olma isteğinde.", next: "eksik_partner_3" }
+            ]
+        },
+
+        // =========================================================
+        //               AİLE KOLU ZİNCİRİ
+        // =========================================================
+        "sevgi_aile_3": {
+            question: "Ailenden gelen sevgiyi en çok hangi yolla (Sevgi Dili) hissediyorsun?",
+            options: [
+                { text: "Bana söylenen takdir sözleriyle.", next: "aile_sozlu_4a" }, 
+                { text: "Bana ayrılan kaliteli zamanla.", next: "aile_zaman_4b" } 
+            ]
+        },
+        "aile_sozlu_4a": {
+            question: "Ailenin sözleri sana ilham veriyor mu, yoksa sadece sorumluluk yüklüyor mu?",
+            options: [
+                { text: "Motive ediyor ve ilham veriyorlar.", next: "aile_sozlu_5a" },
+                { text: "Bazen baskı hissediyorum.", next: "aile_zaman_5b" }
+            ]
+        },
+        "aile_zaman_4b": {
+            question: "Bu zamanı birlikte geçirme şekliniz, gerçekten 'kaliteli' mi, yoksa sadece aynı ortamda bulunmak mı?",
+            options: [
+                { text: "Birlikteyken telefondan uzak durulur, anlamlıdır.", next: "aile_sozlu_5a" }, 
+                { text: "Çoğunlukla herkes kendi işine bakar.", next: "aile_zaman_5b" }
+            ]
+        },
+        "aile_sozlu_5a": {
+            question: "Peki bu pozitifliği kendi hayatına nasıl yansıtıyorsun? Başkalarını da kolayca takdir ediyor musun?",
+            options: [
+                { text: "Evet, ben de takdir etmeyi seviyorum.", next: "son_tavsiye_pozitif" },
+                { text: "Hayır, bu yönüm zayıf.", next: "son_tavsiye_akis" }
+            ]
+        },
+        "aile_zaman_5b": {
+            question: "Ailenden aldığın sevgiye rağmen hissettiğin bu baskı/yüzeyellik, sence seni nasıl bir ilişki kurmaya itiyor?",
+            options: [
+                { text: "Kendimi kanıtlama ihtiyacı hissediyorum.", next: "son_tavsiye_degisim" },
+                { text: "Duygusuz biri olmaktan korkuyorum.", next: "son_tavsiye_akis" }
+            ]
+        },
+        
+        // =========================================================
+        //               ARKADAŞ KOLU ZİNCİRİ
+        // =========================================================
+        "sevgi_arkadas_3": {
+            question: "Arkadaşlarının senin için önceliği nedir? Eğlence mi, zor zamanlar mı?",
+            options: [
+                { text: "Birlikte eğlenmek ve anı yaşamak.", next: "arkadas_eglence_4" }, 
+                { text: "Kötü günde ilk aradığım kişi olmaları.", next: "arkadas_zorluk_4" } 
+            ]
+        },
+        "arkadas_eglence_4": {
+            question: "Eğlence bittiğinde aranızdaki bağ da bitiyor mu? Yoksa ortak hayalleriniz var mı?",
+            options: [
+                { text: "Ortak gelecek planlarımız var.", next: "arkadas_eglence_5a" },
+                { text: "Sadece anlık bir ilişki gibi.", next: "arkadas_zorluk_5b" }
+            ]
+        },
+        "arkadas_zorluk_4": {
+            question: "Zor zamanında yanındalar, peki sen de onların zor zamanında aynı fedakarlığı yapıyor musun?",
+            options: [
+                { text: "Kesinlikle, bu karşılıklıdır.", next: "arkadas_eglence_5a" },
+                { text: "Bazen kendimi geri çekiyorum.", next: "arkadas_zorluk_5b" }
+            ]
+        },
+        "arkadas_eglence_5a": {
+            question: "Bu karşılıklı destek ve güven, seni risk almaya ve daha cesur olmaya itiyor mu?",
+            options: [
+                { text: "Evet, onlardan güç alıyorum.", next: "son_tavsiye_pozitif" },
+                { text: "Hayır, riskten kaçınırım.", next: "son_tavsiye_akis" }
+            ]
+        },
+        "arkadas_zorluk_5b": {
+            question: "İlişkilerin 'sadece anlık' veya 'karşılıklı olmayan fedakarlık' üzerine kuruluysa, sence bu durum seni ne kadar mutlu ediyor?",
+            options: [
+                { text: "Beni çok yoruyor ve üzüyor.", next: "son_tavsiye_degisim" },
+                { text: "Şimdilik idare ediyor.", next: "son_tavsiye_akis" }
+            ]
+        },
+
+        // =========================================================
+        //               PARTNER KOLU ZİNCİRİ
+        // =========================================================
+        "sevgi_partner_3": {
+            question: "Partnerinle arandaki sevgi, günlük rutinlerinizi ne kadar etkiliyor? Rutinlerinizin dışına çıkıyor musunuz?",
+            options: [
+                { text: "Rutinler dışına çıkmayı seviyoruz.", next: "partner_rutin_4a" },
+                { text: "Çoğunlukla rutine bağlıyız.", next: "partner_rutin_4b" }
+            ]
+        },
+        "partner_rutin_4a": {
+            question: "Birlikte geçirdiğiniz bu sıra dışı zamanlar, ortak geleceğinizi planlamanıza yardımcı oluyor mu?",
+            options: [
+                { text: "Evet, sürekli yeni hayaller kuruyoruz.", next: "partner_rutin_5a" },
+                { text: "Hayır, sadece o anı yaşıyoruz.", next: "partner_rutin_5b" }
+            ]
+        },
+        "partner_rutin_4b": {
+            question: "Rutin hayatınızda sizi en çok ne zorluyor? Yeterince heyecan var mı?",
+            options: [
+                { text: "Bazen birbirimizden sıkılıyoruz.", next: "partner_rutin_5a" },
+                { text: "Güven veriyor ama heyecanı düşük.", next: "partner_rutin_5b" }
+            ]
+        },
+        "partner_rutin_5a": {
+            question: "Sıkılma hissi, sence partnerine olan bağlılığını azaltıyor mu?",
+            options: [
+                { text: "Evet, kendimi uzaklaşıyor hissediyorum.", next: "son_tavsiye_degisim" },
+                { text: "Hayır, bağlılık farklı bir şey.", next: "son_tavsiye_akis" }
+            ]
+        },
+        "partner_rutin_5b": {
+            question: "Sizce heyecanı artırmak için kimin ilk adımı atması gerekiyor?",
+            options: [
+                { text: "İkimiz de sorumluyuz.", next: "son_tavsiye_akis" },
+                { text: "Benim daha yaratıcı olmam lazım.", next: "son_tavsiye_degisim" }
+            ]
+        },
+
+
+        // =========================================================
+        //               EKSİK BENLİK KOLU ZİNCİRİ
+        // =========================================================
+        "eksik_benlik_3": {
+            question: "Kendini yeterince sevememenin temel sebebi ne olabilir?",
+            options: [
+                { text: "Başarısızlık korkusu.", next: "benlik_basarisizlik_4" },
+                { text: "Sürekli başkalarıyla kıyaslama.", next: "benlik_kiyaslama_4" }
+            ]
+        },
+        "benlik_basarisizlik_4": {
+            question: "Başarısızlık korkusu seni eyleme geçmekten alıkoyuyor mı, yoksa tam tersi mi?",
+            options: [
+                { text: "Eylemsiz kalıyorum, bu beni yoruyor.", next: "benlik_basarisizlik_5a" },
+                { text: "Daha çok çalışmaya itiyor ama hiç tatmin olmuyorum.", next: "benlik_kiyaslama_5b" }
+            ]
+        },
+        "benlik_kiyaslama_4": {
+            question: "Kıyasladığın kişiler, sana gerçekten ilham verenler mi yoksa sadece daha mutlu görünenler mi?",
+            options: [
+                { text: "Daha mutlu görünen, ulaşılmaz kişiler.", next: "benlik_basarisizlik_5a" },
+                { text: "İlham veren, mentorum olabilecek kişiler.", next: "benlik_kiyaslama_5b" }
+            ]
+        },
+        "benlik_basarisizlik_5a": {
+            question: "Bu olumsuz durumdan kurtulmak için en basit ve ilk adımı ne zaman atmayı planlıyorsun?",
+            options: [
+                { text: "Bugün, şimdi!", next: "son_tavsiye_degisim" },
+                { text: "Biraz daha düşünmem lazım.", next: "son_tavsiye_akis" }
+            ]
+        },
+        "benlik_kiyaslama_5b": {
+            question: "Hiç tatmin olmamak, sürekli daha fazlasını istemek... Sence bu durum hayatının hangi alanında en çok yorgunluğa sebep oluyor?",
+            options: [
+                { text: "Sosyal hayatımda (kendimi geri çekiyorum).", next: "son_tavsiye_degisim" },
+                { text: "İşimde/okulda (sürekli baskı altındayım).", next: "son_tavsiye_akis" }
+            ]
+        },
+
+        // =========================================================
+        //               EKSİK AİLE KOLU ZİNCİRİ
+        // =========================================================
+        "eksik_aile_3": {
+            question: "Ailenle arandaki sevgisizlik en çok hangi yaşanmışlıktan sonra arttı?",
+            options: [
+                { text: "Son bir olaydan sonra (Büyük bir tartışma, vs.).", next: "aile_olay_4a_eksik" },
+                { text: "Yıllar içinde yavaşça oldu (İletişimsizlik).", next: "aile_yavas_4b_eksik" }
+            ]
+        },
+        "aile_olay_4a_eksik": {
+            question: "Bu olaydan sonra duygularını onlara net olarak ifade ettin mi?",
+            options: [
+                { text: "Hayır, içimde tutuyorum.", next: "aile_olay_5a_eksik" },
+                { text: "Evet, ama anlaşılmadım.", next: "aile_olay_5b_eksik" }
+            ]
+        },
+        "aile_yavas_4b_eksik": {
+            question: "İletişimsizliği düzeltmek için son 6 ayda bir deneme yaptın mı?",
+            options: [
+                { text: "Evet, ama düzelmedi.", next: "aile_olay_5b_eksik" },
+                { text: "Hayır, bir adım atmadım.", next: "aile_olay_5a_eksik" }
+            ]
+        },
+        "aile_olay_5a_eksik": {
+            question: "İçinde tuttuğun bu duygular veya adım atmaman, sence başka ilişkilerine de yansıyor mu?",
+            options: [
+                { text: "Evet, açılmaktan korkuyorum.", next: "son_tavsiye_degisim" },
+                { text: "Hayır, başka ilişkilerimde daha rahatım.", next: "son_tavsiye_akis" }
+            ]
+        },
+        "aile_olay_5b_eksik": {
+            question: "Anlaşılmadığını hissetmek, ailene karşı duvar örmene neden oldu mu?",
+            options: [
+                { text: "Evet, kendimi izole ettim.", next: "son_tavsiye_degisim" },
+                { text: "Hayır, sadece durumu kabullendim.", next: "son_tavsiye_akis" }
+            ]
+        },
+        
+        // =========================================================
+        //               EKSİK PARTNER KOLU ZİNCİRİ
+        // =========================================================
+        "eksik_partner_3": {
+            question: "Romantik bir ilişkide olma isteğin, yalnız kalma korkusundan mı yoksa gerçekten hayatına birini katma arzusundan mı geliyor?",
+            options: [
+                { text: "Yalnızlık korkusu.", next: "partner_yalnizlik_4a_eksik" },
+                { text: "Gerçekten sevme isteği.", next: "partner_sevme_4b_eksik" }
+            ]
+        },
+        "partner_yalnizlik_4a_eksik": {
+            question: "Peki bu yalnızlık korkusu, seni yanlış insanlara mı yönlendiriyor?",
+            options: [
+                { text: "Evet, yanlış seçimler yapıyorum.", next: "son_tavsiye_degisim" },
+                { text: "Hayır, seçimlerime dikkat ediyorum.", next: "son_tavsiye_akis" }
+            ]
+        },
+        "partner_sevme_4b_eksik": {
+            question: "Sevme isteğini, sadece bir partner üzerinden mi gerçekleştirebileceğini düşünüyorsun?",
+            options: [
+                { text: "Evet, en önemlisi o.", next: "son_tavsiye_degisim" },
+                { text: "Hayır, sevgi her yerde var.", next: "son_tavsiye_pozitif" }
+            ]
+        },
+        
+        // =========================================================
+        //               SONUÇ VE TAVSİYELER (Tüm yollar buraya bağlanır)
+        // =========================================================
+        "son_tavsiye_pozitif": {
+            question: "Harika! Görünen o ki, ilişkilerinde sağlam ve pozitif bir temel kurmuşsun. Bu pozitifliği hayatının diğer alanlarına yaymayı ve büyütmeyi dene. Mutluluğun sırrı, verdiğin sevgiyi görmekte saklı! 😊 (SON)",
+            options: []
+        },
+        "son_tavsiye_degisim": {
+            question: "Şu anki hislerin, bazı şeyleri değiştirmen gerektiğini gösteriyor. Küçük adımlarla başla. Unutma, en önemli ilişki, kendinle kurduğun ilişkidir! 🛠️ (SON)",
+            options: []
+        },
+        "son_tavsiye_akis": {
+            question: "Aldığın cevaplar, hayatındaki sevgi akışında bazı pürüzler olduğunu gösteriyor. Bu durumu hemen düzeltmeye çalışma. Bir hafta boyunca sadece gözlemci ol ve seni kimin gerçekten mutlu ettiğini not et. Değişim, farkındalıkla başlar. 💡 (SON)",
+            options: []
+        }
+    };
+
+    let currentQuestionId = "start";
+
+    // Soru yükleme ve gösterme fonksiyonu
+    function loadQuestion(questionId) {
+        const data = questions[questionId];
+        const questionEl = document.getElementById("question");
+        const optionsContainer = document.getElementById("options-container");
+
+        if (!data) {
+            questionEl.textContent = `Hata: Bir sonraki soru bulunamadı. ID: ${questionId}. Lütfen JS kodunu kontrol et.`;
+            optionsContainer.innerHTML = "";
+            return;
+        }
+        
+        // SON MESAJ İSE BUTONLARI KALDIR VE SADECE MESAJI GÖSTER
+        if (data.options.length === 0) {
+            questionEl.className = 'son_mesaj'; // Sonuç için özel stil uygula
+        } else {
+            questionEl.className = ''; // Normal stili geri yükle
+        }
+
+        questionEl.textContent = data.question;
+        optionsContainer.innerHTML = ""; 
+
+        data.options.forEach(option => {
+            const button = document.createElement("button");
+            button.className = "option-button";
+            button.textContent = option.text;
+            
+            if (option.next) {
+                button.onclick = () => {
+                    currentQuestionId = option.next;
+                    loadQuestion(currentQuestionId);
+                };
+            }
+            optionsContainer.appendChild(button);
+        });
+    }
+
+    // Sayfa yüklendiğinde sohbeti başlat
+    loadQuestion(currentQuestionId);
+</script>
+
+</body>
+</html>
